@@ -18,34 +18,11 @@ int main(int argc, char *argv[])
       g_error_free(error);
       return 1;
    }
-   // OPEN FILE
-    string filename = argv[1];
-    FILE *file = fopen(filename, "r");
-
-    // Check if file exists
-
-    uint8_t buffer[4];
-    unint8_t signature[] = {37, 80, 68, 70}
-    fread(buffer, 1, 4, file);
-    for (int i = 0; i < 4; i++)
-    {
-        printf("%i", buffer[i]);
+    if (poppler_document_get_n_pages(doc) > 0) {
+        printf("The file is a PDF.\n");
+    } else {
+        printf("The file is not a valid PDF.\n");
     }
-    printf("\n");
-
-    for (int x = 0; x < 4; x++)
-    {
-        if (buffer[x] != signature[x])
-        {
-            printf("likely not PDF");
-            fclose(file);
-            return 0;
-        }
-    }
-    printf("likely a PDF! \n")
-    fclose(file);
-    return 0;
-
     // Extract text and formatting from the PDF here
     // Create a DOC file and write the extracted content
 
