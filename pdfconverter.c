@@ -1,7 +1,6 @@
 #include <stdio.h>
-#include <stdint.h> 
 #include <poppler/glib/poppler.h>
-
+#include <libreofficekit/libreofficekit.h>
 
 int main(int argc, char *argv[])
 {
@@ -18,14 +17,35 @@ int main(int argc, char *argv[])
       g_error_free(error);
       return 1;
    }
-    if (poppler_document_get_n_pages(doc) > 0) {
+    if (poppler_document_get_n_pages(doc) > 0) 
+    {
         printf("The file is a PDF.\n");
-    } else {
+    } 
+    else 
+    {
         printf("The file is not a valid PDF.\n");
     }
     // Extract text and formatting from the PDF here
-    // Create a DOC file and write the extracted content
+   LOKdocument *doc = lok_document_new(lokit, "writer");
+   // iterate through pages 
+   int pageCount = poppler_get_n_pages(doc);
 
-    poppler_document_free(doc);
-    return 0;
+   for (int i = 0; i < pageCount; i++)
+   {
+      PopplerPage *page = poppler_document_get_page(PDFDoc, pagenum);
+      gchar *text = poppler_page_get_text(page);
+
+      //Put text into new doc
+      lok_document_insert_text(doc, text);
+      g_free(text);
+   }
+
+   //save doc
+   lok_document_save_as(doc, docFileName, "doc");
+
+   lok_document_free(doc);
+   lok_exit(loKit);
+   poppler_document_free(doc);
+   
+   return 0;
 }
