@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
       g_free(text);
    }
 
-   //save doc
+   //save .doc file
    lok_document_save_as(doc, docFileName, "doc");
 
    lok_document_free(doc);
